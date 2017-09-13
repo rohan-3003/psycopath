@@ -1,13 +1,16 @@
 package com.example.dell.judge.attendance;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.example.dell.judge.MyApplication;
 import com.example.dell.judge.R;
 
 /**
@@ -28,6 +31,7 @@ public class CurrentAttendance extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    TextView name1,name2;
     private OnFragmentInteractionListener mListener;
 
     public CurrentAttendance() {
@@ -66,7 +70,17 @@ public class CurrentAttendance extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_current_attendance, container, false);
-
+        name1=(TextView)view.findViewById(R.id.name1);
+        name2=(TextView)view.findViewById(R.id.name2);
+        AttendenceManager ad= new AttendenceManager(MyApplication.getContext());
+        ad.open();
+        Cursor cr=ad.fetchStudents();
+        if(cr.moveToFirst())
+        {
+            do{
+                name1.setText(cr.getString(1));
+            }while(cr.moveToNext());
+        }
         return view;
     }
 

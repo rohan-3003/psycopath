@@ -22,7 +22,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public static final String KEY_WEDNESDAY="Wednesday";
     public static final String KEY_THURSDAY="Thursday";
     public static final String KEY_FRIDAY="Friday";
-    public static final String KEY_STUDENT="student";
+    public static final String KEY_STUDENT="students";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

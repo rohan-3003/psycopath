@@ -28,6 +28,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.dell.judge.attendance.AttendenceManager;
 import com.example.dell.judge.database.DatabaseHandler;
 import com.example.dell.judge.schedule.Current_Schedule;
 import com.example.dell.judge.schedule.DaySchedule;
@@ -40,6 +41,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.jar.Attributes;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -104,7 +106,7 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+        createStudents("vktamta");
     }
 
     @Override
@@ -169,5 +171,76 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    public void createStudents(final String database){
+        RequestQueue queue = Volley.newRequestQueue(MyApplication.getContext());
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                URLs.GET_SCHEDULE, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+
+                ParseCheckedcreate len = new ParseCheckedcreate(response);
+                len.parseeJSON();
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("error",error.toString());
+            }
+
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("number", database);
+                return params;
+            }
+
+        };
+        queue.add(strReq);
+
+        //  MyApplication.getInstance().addToRequestQueue(strReq);
+    }
+
 }
 
+
+class ParseCheckedcreate{
+
+    public static String[] students;
+
+    public static final String JSON_ARRAY = "students";
+    public static final String KEY_STUDENT= "students";
+    private JSONArray users = null;
+    private String json;
+    public ParseCheckedcreate(String json){
+        this.json = json;
+    }
+
+    protected void parseeJSON(){
+        JSONObject jsonObject=null;
+        try {
+            jsonObject = new JSONObject(json);
+            users = jsonObject.getJSONArray(JSON_ARRAY);
+            Log.d("json",users.toString());
+            students = new String[users.length()];
+            AttendenceManager ad = new AttendenceManager(MyApplication.getContext());
+            ad.open();
+            ad.deleteStudents();
+
+            for(int i=0;i<users.length();i++){
+                JSONObject jo = users.getJSONObject(i);
+                students[i] = jo.getString(KEY_STUDENT);
+                ad.insertStudents(students[i]);
+            }
+            ad.close();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
