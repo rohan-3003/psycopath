@@ -13,7 +13,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "vktamta";
-    public static final String TABLE_NAME = "schedule";
+    public static final String SCHEDULE_TABLE_NAME = "schedule";
+    public static final String STUDENT_TABLE_NAME = "mobile_computing_students";
     public static final String KEY_ID= "id";
     public static final String KEY_TIME= "time";
     public static final String KEY_MONDAY = "Monday";
@@ -21,6 +22,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public static final String KEY_WEDNESDAY="Wednesday";
     public static final String KEY_THURSDAY="Thursday";
     public static final String KEY_FRIDAY="Friday";
+    public static final String KEY_STUDENT="student";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -29,14 +31,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // Creating Tables
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_CONTACTS_TABLE ="CREATE TABLE if not exists "+TABLE_NAME+"("+KEY_ID+" integer primary key autoincrement, "+KEY_TIME+" TIME, "+KEY_MONDAY+" text, "+KEY_TUESDAY+" text, "+KEY_WEDNESDAY+" text, "+KEY_THURSDAY+" text,"+KEY_FRIDAY+" text);";
-        db.execSQL(CREATE_CONTACTS_TABLE);
+        String CREATE_SCHEDULE_TABLE ="CREATE TABLE if not exists "+SCHEDULE_TABLE_NAME+"("+KEY_ID+" integer primary key autoincrement, "+KEY_TIME+" TIME, "+KEY_MONDAY+" text, "+KEY_TUESDAY+" text, "+KEY_WEDNESDAY+" text, "+KEY_THURSDAY+" text,"+KEY_FRIDAY+" text);";
+        db.execSQL(CREATE_SCHEDULE_TABLE);
+        String CREATE_MOBILE_COMPUTING_STUDENTS_TABLE ="CREATE TABLE if not exists "+STUDENT_TABLE_NAME+"("+KEY_ID+" integer primary key autoincrement, "+KEY_STUDENT+"text);";
+        db.execSQL(CREATE_MOBILE_COMPUTING_STUDENTS_TABLE);
     }
 
     // Upgrading database
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + SCHEDULE_TABLE_NAME);
         onCreate(db);
     }
 
