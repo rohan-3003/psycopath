@@ -29,6 +29,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.dell.judge.attendance.AttendenceManager;
+import com.example.dell.judge.attendance.CurrentAttendance;
 import com.example.dell.judge.database.DatabaseHandler;
 import com.example.dell.judge.schedule.Current_Schedule;
 import com.example.dell.judge.schedule.DaySchedule;
@@ -46,7 +47,7 @@ import java.util.jar.Attributes;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         Schedule_menu.OnFragmentInteractionListener,
-        Current_Schedule.OnFragmentInteractionListener,DaySchedule.OnFragmentInteractionListener{
+        Current_Schedule.OnFragmentInteractionListener,DaySchedule.OnFragmentInteractionListener,CurrentAttendance.OnFragmentInteractionListener{
 
     DatabaseHandler myDB;
     @Override
@@ -150,7 +151,11 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_schedule) {
 
         } else if (id == R.id.nav_attendance) {
-
+            Fragment fragment = new CurrentAttendance();
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.replace(R.id.homeFragment,fragment);
+            ft.commit();
 
         } else if (id == R.id.nav_search) {
 
@@ -174,7 +179,7 @@ public class MainActivity extends AppCompatActivity
     public void createStudents(final String database){
         RequestQueue queue = Volley.newRequestQueue(MyApplication.getContext());
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                URLs.GET_SCHEDULE, new Response.Listener<String>() {
+                URLs.GET_STUDENTS, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {

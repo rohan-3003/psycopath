@@ -5,4 +5,5 @@ package com.example.dell.judge;
  */
 public class URLs {
     public static final String GET_SCHEDULE="http://talle.in/psycopath/getSchedule.php";
+    public static final String GET_STUDENTS="http://talle.in/psycopath/getStudents.php";
 }

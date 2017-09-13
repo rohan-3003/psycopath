@@ -31,9 +31,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // Creating Tables
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_SCHEDULE_TABLE ="CREATE TABLE if not exists "+SCHEDULE_TABLE_NAME+"("+KEY_ID+" integer primary key autoincrement, "+KEY_TIME+" TIME, "+KEY_MONDAY+" text, "+KEY_TUESDAY+" text, "+KEY_WEDNESDAY+" text, "+KEY_THURSDAY+" text,"+KEY_FRIDAY+" text);";
+        String CREATE_SCHEDULE_TABLE ="CREATE TABLE if not exists "+SCHEDULE_TABLE_NAME+"("+KEY_ID+" integer primary key autoincrement, "+KEY_TIME+" TIME, "+KEY_MONDAY+" text, "+KEY_TUESDAY+" text, "+KEY_WEDNESDAY+" text, "+KEY_THURSDAY+" text,"+KEY_FRIDAY+" text)";
+        String CREATE_MOBILE_COMPUTING_STUDENTS_TABLE ="create table `mobile_computing_students` (id integer primary key autoincrement , students text)";
         db.execSQL(CREATE_SCHEDULE_TABLE);
-        String CREATE_MOBILE_COMPUTING_STUDENTS_TABLE ="CREATE TABLE if not exists "+STUDENT_TABLE_NAME+"("+KEY_ID+" integer primary key autoincrement, "+KEY_STUDENT+"text);";
         db.execSQL(CREATE_MOBILE_COMPUTING_STUDENTS_TABLE);
     }
 
@@ -41,6 +41,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + SCHEDULE_TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + STUDENT_TABLE_NAME);
         onCreate(db);
     }
 
