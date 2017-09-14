@@ -11,5 +11,15 @@
         android:id="@+id/attendanceRecycle">
 
     </android.support.v7.widget.RecyclerView>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="SUBMIT"
+            android:id="@+id/submit"/>
+    </RelativeLayout>
 
 </RelativeLayout>

@@ -7,18 +7,29 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.dell.judge.MyApplication;
 import com.example.dell.judge.R;
+import com.example.dell.judge.URLs;
 import com.example.dell.judge.schedule.Schedule_Menu_Adapter;
 import com.example.dell.judge.schedule.Schedule_Menu_Details;
 import com.example.dell.judge.schedule.Schedule_Menu_Model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,6 +54,8 @@ public class CurrentAttendance extends Fragment {
     RecyclerView recyclerView;
     ArrayList<AttendanceManagerModel> list= new ArrayList<>();
     AttendanceManagerAdapter sma;
+    Button submit;
+    ArrayList<Character> attendanceArray = new ArrayList<>();
 
     public CurrentAttendance() {
         // Required empty public constructor
@@ -85,19 +98,40 @@ public class CurrentAttendance extends Fragment {
         sma = new AttendanceManagerAdapter(list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(sma);
-//        name1=(TextView)view.findViewById(R.id.name1);
-//        name2=(TextView)view.findViewById(R.id.name2);
-//        AttendenceManager ad= new AttendenceManager(MyApplication.getContext());
-//        ad.open();
-//        Cursor cr=ad.fetchStudents();
-//        if(cr.moveToFirst())
-//        {
-//            do{
-//                name1.setText(cr.getString(1));
-//            }while(cr.moveToNext());
-//        }
+        submit=(Button) view.findViewById(R.id.submit);
+        attendanceArray=sma.getArray();
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                RequestQueue queue = Volley.newRequestQueue(MyApplication.getContext());
+                StringRequest strReq = new StringRequest(Request.Method.POST,
+                        URLs.SET_ATTENDANCE, new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("error",error.toString());
+                    }
+
+                }) {
+                    @Override
+                    protected Map<String, String> getParams() {
+                        Map<String, String> params = new HashMap<String, String>();
+                        params.put("attendanceArray",attendanceArray.toString());
+                        return params;
+                    }
+
+                };
+                queue.add(strReq);
+            }
+        });
         return view;
     }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

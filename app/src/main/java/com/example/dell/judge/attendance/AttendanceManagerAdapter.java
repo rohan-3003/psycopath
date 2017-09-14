@@ -7,9 +7,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.dell.judge.MyApplication;
 import com.example.dell.judge.R;
+import com.example.dell.judge.URLs;
 import com.example.dell.judge.schedule.ScheduleVariable;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by dell on 9/14/2017.
@@ -71,7 +85,11 @@ public void onClick(View view) {
             Log.d("attend",attendanceArray.toString());
         }
     });
+
         }
+    public ArrayList<Character> getArray(){
+        return attendanceArray;
+    }
 
 @Override
 public int getItemCount() {
@@ -88,6 +106,7 @@ public static class ScheduleHolder extends RecyclerView.ViewHolder{
         studentCd=(CardView) itemView.findViewById(R.id.studentCard);
         presentButton=(Button) itemView.findViewById(R.id.present);
         absentButton=(Button) itemView.findViewById(R.id.absent);
+
     }
 }
 }
