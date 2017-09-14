@@ -39,13 +39,35 @@ public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         sh.presentButton.setOnClickListener(new View.OnClickListener() {
 @Override
 public void onClick(View view) {
-            attendanceArray.add(pos,'p');
+            if(pos>=attendanceArray.size())
+            {
+                for(int i=attendanceArray.size();i<pos;i++)
+                {
+                    attendanceArray.add(i,'a');
+                }
+                attendanceArray.add(pos,'p');
+            }else
+            {
+                attendanceArray.set(pos,'p');
+            }
+
+    Log.d("attend",attendanceArray.toString());
         }
         });
     sh.absentButton.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            attendanceArray.add(pos,'a');
+            if(pos>=attendanceArray.size())
+            {
+                for(int i=attendanceArray.size();i<pos;i++)
+                {
+                    attendanceArray.add(i,'a');
+                }
+                attendanceArray.add(pos,'a');
+            }else
+            {
+                attendanceArray.set(pos,'a');
+            }
             Log.d("attend",attendanceArray.toString());
         }
     });
