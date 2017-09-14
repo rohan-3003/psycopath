@@ -12,6 +12,24 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/student"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A"
+            android:id="@+id/absent"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="P"
+            android:id="@+id/present"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/absent"
+            android:layout_toStartOf="@+id/absent" />
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>
