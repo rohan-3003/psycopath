@@ -33,16 +33,19 @@ import com.example.dell.judge.attendance.CurrentAttendance;
 import com.example.dell.judge.database.DatabaseHandler;
 import com.example.dell.judge.schedule.Current_Schedule;
 import com.example.dell.judge.schedule.DaySchedule;
-import com.example.dell.judge.schedule.ScheduleManager;
 import com.example.dell.judge.schedule.Schedule_menu;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormatSymbols;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.jar.Attributes;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -151,6 +154,37 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_schedule) {
 
         } else if (id == R.id.nav_attendance) {
+            RequestQueue queue = Volley.newRequestQueue(MyApplication.getContext());
+            StringRequest strReq = new StringRequest(Request.Method.POST,
+                    URLs.GET_ATTENDANCE, new Response.Listener<String>() {
+
+                @Override
+                public void onResponse(String response) {
+
+                    ParseCheckedcreate len = new ParseCheckedcreate(response);
+                    len.parseeJSON();
+                }
+            }, new Response.ErrorListener() {
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d("error",error.toString());
+                }
+
+            }) {
+                @Override
+                protected Map<String, String> getParams() {
+                    Date date = new Date();   // given date
+                    Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
+                    calendar.setTime(date);   // assigns calendar to given date
+                    int currentTime = calendar.get(Calendar.HOUR_OF_DAY); // gets hour in 24h format
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("time", String.valueOf(currentTime));
+                    return params;
+                }
+
+            };
+            queue.add(strReq);
             Fragment fragment = new CurrentAttendance();
             FragmentManager fm = getSupportFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
@@ -205,7 +239,6 @@ public class MainActivity extends AppCompatActivity
 
         };
         queue.add(strReq);
-
         //  MyApplication.getInstance().addToRequestQueue(strReq);
     }
 
@@ -229,7 +262,6 @@ class ParseCheckedcreate{
         try {
             jsonObject = new JSONObject(json);
             users = jsonObject.getJSONArray(JSON_ARRAY);
-            Log.d("json",users.toString());
             students = new String[users.length()];
             AttendenceManager ad = new AttendenceManager(MyApplication.getContext());
             ad.open();

@@ -5,6 +5,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,11 @@ import android.widget.TextView;
 
 import com.example.dell.judge.MyApplication;
 import com.example.dell.judge.R;
+import com.example.dell.judge.schedule.Schedule_Menu_Adapter;
+import com.example.dell.judge.schedule.Schedule_Menu_Details;
+import com.example.dell.judge.schedule.Schedule_Menu_Model;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,6 +40,9 @@ public class CurrentAttendance extends Fragment {
 
     TextView name1,name2;
     private OnFragmentInteractionListener mListener;
+    RecyclerView recyclerView;
+    ArrayList<AttendanceManagerModel> list= new ArrayList<>();
+    AttendanceManagerAdapter sma;
 
     public CurrentAttendance() {
         // Required empty public constructor
@@ -70,17 +80,22 @@ public class CurrentAttendance extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_current_attendance, container, false);
-        name1=(TextView)view.findViewById(R.id.name1);
-        name2=(TextView)view.findViewById(R.id.name2);
-        AttendenceManager ad= new AttendenceManager(MyApplication.getContext());
-        ad.open();
-        Cursor cr=ad.fetchStudents();
-        if(cr.moveToFirst())
-        {
-            do{
-                name1.setText(cr.getString(1));
-            }while(cr.moveToNext());
-        }
+        recyclerView=(RecyclerView)view.findViewById(R.id.attendanceRecycle);
+        list = AttendanceManagerDetails.getList();
+        sma = new AttendanceManagerAdapter(list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(sma);
+//        name1=(TextView)view.findViewById(R.id.name1);
+//        name2=(TextView)view.findViewById(R.id.name2);
+//        AttendenceManager ad= new AttendenceManager(MyApplication.getContext());
+//        ad.open();
+//        Cursor cr=ad.fetchStudents();
+//        if(cr.moveToFirst())
+//        {
+//            do{
+//                name1.setText(cr.getString(1));
+//            }while(cr.moveToNext());
+//        }
         return view;
     }
 
